@@ -7,6 +7,9 @@ const swaggerUi = require('swagger-ui-express');
 // นำเข้าเอกสาร swaggerJSDoc เพื่อสร้างอัตโมมัต
 const swaggerJSDoc = require('swagger-jsdoc');
 
+// นำเข้า path เพิ่มจัดการ path
+const path = require('path');
+
 // นำเข้า route เพิ่มกระจากกระจายการทำงานไปเส้นทางต่างๆ
 const router = require('./router.js');
 
@@ -23,7 +26,7 @@ const swaggerDefinition = {
 };
 
 // กำหนด swagger spec
-const swaggerSpec = swaggerJSDoc({ swaggerDefinition, apis: ['./features/*.js'] });
+const swaggerSpec = swaggerJSDoc({ swaggerDefinition, apis: [path.join(__dirname, '/features/*.js')] });
 
 // สร้าง route สำหรับ swagger ui
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

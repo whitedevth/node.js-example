@@ -43,7 +43,7 @@ function getUserById(id) {
     const data = readDataFromJson();
 
     // ค้นหาข้อมูลด้วย id
-    const user = data.find(u => u.id === Number(req.params.id));
+    const user = data.find(u => u.id === Number(id));
 
     // หากไม่เจอข้อมูลให้ส่งออกค่า null
     if (!user) {
@@ -57,13 +57,13 @@ function getUserById(id) {
 // function สร้าง user
 function createUser(user) {
     // อ่านข้อมูลทั้งหมด
-    const data = readDataFromJson();
+    const users = readDataFromJson();
 
     // สร้าง user
-    const newUser = { id: data.length + 1, ...user };
+    const newUser = { id: users.length + 1, ...user };
 
     // เพิ่มข้อมูลใหม่
-    data.push(newUser);
+    users.push(newUser);
 
     // เขียนข้อมูลลง json
     writeDataToJson(users);
@@ -75,10 +75,10 @@ function createUser(user) {
 // function แก้ไข user ด้วย id
 function updateUser(id, user) {
     // ดึงข้อมูลทั้งหมด
-    const users = getUserList();
+    const users = readDataFromJson();
 
     // ค้นหา index ด้วย id
-    const userIndex = users.findIndex(u => u.id === Number(req.params.id));
+    const userIndex = users.findIndex(u => u.id === Number(id));
 
     // หากไม่พบให้ส่งออกค่า null
     if (userIndex < 0) {
@@ -86,7 +86,7 @@ function updateUser(id, user) {
     }
 
     // รวมข้อมูล
-    users[userIndex] = [...users[userIndex], ...req.body];
+    users[userIndex] = { id: Number(id), ...user };
 
     // เขียนข้อมูลลง json
     writeDataToJson(users);
@@ -101,7 +101,7 @@ function deleteUser(id) {
     const users = getUserList();
 
     // ค้นหา index ด้วย id
-    const userIndex = users.findIndex(u => u.id === Number(req.params.id));
+    const userIndex = users.findIndex(u => u.id === Number(id));
 
     // หากไม่พบให้ส่งออกค่า null
     if (userIndex < 0) {
@@ -314,7 +314,7 @@ router.delete('/:id', (req, res) => {
     }
 
     // ส่งข้อมูลกลับ client ด้วยสถานะ 204
-    res.status(204);
+    res.status(204).send();
 });
 
 // ส่งออก เพื่อให้ router ใช้งาน
